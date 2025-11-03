@@ -66,13 +66,13 @@ def main():
     img = Image.open('data/input.png').convert('RGB') # reading image through pillow library
     arr = np.array(img) # converting to a numpy array
 
-    # msg = b'aranck is a charmander' # message to encode
+    msg = b'I love dogs' # message to encode
     # print(msg)
 
-    # stego = encode_lsb(arr, msg) # encoding the message in the image
-    # Image.fromarray(stego).save('data/stego1.png') # saving the modified image
+    stego = encode_lsb(arr, msg, channels=(0,1,2)) # encoding the message in the image
+    Image.fromarray(stego).save('data/stego.png') # saving the modified image
 
-    stego_arr = np.array(Image.open('data/buffu.png').convert('RGB'))
+    stego_arr = np.array(Image.open('data/stego.png').convert('RGB'))
     message = decode_lsb(stego_arr, channels=(0,1,2)) # decoding the message
     print(message)
 
