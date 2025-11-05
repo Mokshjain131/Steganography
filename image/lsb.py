@@ -1,6 +1,7 @@
 # Least significant bit (LSB) steganography
 from PIL import Image
 import numpy as np
+import os
 
 def encode_lsb(arr: np.ndarray, msg: str, channels: tuple[int, ...] = (0,1,2)) -> np.ndarray:
     print('encoding function')
@@ -66,14 +67,32 @@ def main():
     img = Image.open('data/input.png').convert('RGB') # reading image through pillow library
     arr = np.array(img) # converting to a numpy array
 
+    # # Reading csv
+    # with open('data/Game_of_Thrones_Script.csv','rb') as f:
+    #     msg = f.read()
+    
+    # print(f'CSV file size: {os.path.getsize('data/Game_of_Thrones_Script.csv') / 1024:.1f} KB')
+
     msg = b'I love dogs' # message to encode
-    # print(msg)
+    print(len(msg))
 
     stego = encode_lsb(arr, msg, channels=(0,1,2)) # encoding the message in the image
-    Image.fromarray(stego).save('data/stego.png') # saving the modified image
+    Image.fromarray(arr).save('data/stego.png') # saving the modified image
+
+    print('Size comparison: ')
+    # Before encoding
+    print(f'Input file size: {os.path.getsize('data/GOT.png') / 1024:.1f} KB')
+
+    # After encoding
+    print(f'Stego file size: {os.path.getsize('data/GOT_stego.png') / 1024:.1f} KB')
 
     stego_arr = np.array(Image.open('data/stego.png').convert('RGB'))
     message = decode_lsb(stego_arr, channels=(0,1,2)) # decoding the message
+
+    # # Save decoded csv
+    # with open('data/decoded.csv', 'wb') as f:
+    #     f.write(message.encode('utf-8'))
+
     print(message)
 
 if __name__ == "__main__":
